@@ -14,11 +14,15 @@ class Monster(AnimateSprite):
         self.rect = self.image.get_rect()
         self.rect.x = 1000 + randint(0, 300)
         self.rect.y = 540 - offset
+        self.loot_amount = 10
         self.start_animation()
 
     def set_speed(self, speed):
         self.default_speed = speed
         self.velocity = randint(1, self.default_speed)
+
+    def set_loot_amount(self, amount):
+        self.loot_amount = amount
 
     def damage(self, amount):
         self.health -= amount
@@ -27,6 +31,7 @@ class Monster(AnimateSprite):
             self.rect.x = 1000 + randint(0, 300)
             self.velocity = randint(1, 4)
             self.health = self.max_health
+            self.game.add_score(self.loot_amount)
 
             if self.game.comet_event.is_full_loaded():
                 self.game.all_monsters.remove(self)
@@ -52,6 +57,7 @@ class Mummy(Monster):
     def __init__(self, game):
         super().__init__(game, 'mummy', (130, 130))
         self.set_speed(3)
+        self.set_loot_amount(20)
 
 
 class Alien(Monster):
@@ -62,3 +68,4 @@ class Alien(Monster):
         self.max_health = 250
         self.attack = 0.8
         self.set_speed(1)
+        self.set_loot_amount(80)
